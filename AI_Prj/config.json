@@ -1,0 +1,9 @@
+{
+    "config_file": "config.json",
+    "hotkey_settings": "f11",
+    "hotkey_toggle_auto": "f10",
+    "hotkey_toggle_record": "f9",
+    "output_dir": "recordings",
+    "silence_threshold": 1000,
+    "silence_timeout": 3
+}
