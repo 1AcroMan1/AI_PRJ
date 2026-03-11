@@ -32,7 +32,10 @@ class SettingsDialog(QDialog):
         general_layout.addRow("Таймаут тишины:", self.timeout_spin)
 
         self.output_dir_edit = QLineEdit()
-        general_layout.addRow("Папка записей:", self.output_dir_edit)
+        general_layout.addRow("Папка записей (аудио):", self.output_dir_edit)
+
+        self.text_output_dir_edit = QLineEdit()  # новое поле
+        general_layout.addRow("Папка текстовых записей:", self.text_output_dir_edit)
 
         # Хоткеи
         hotkey_tab = QWidget()
@@ -58,6 +61,7 @@ class SettingsDialog(QDialog):
         self.threshold_spin.setValue(self.settings.silence_threshold)
         self.timeout_spin.setValue(self.settings.silence_timeout)
         self.output_dir_edit.setText(self.settings.output_dir)
+        self.text_output_dir_edit.setText(self.settings.text_output_dir)  # загружаем
         self.hotkey_record_edit.setText(self.settings.hotkey_toggle_record)
         self.hotkey_auto_edit.setText(self.settings.hotkey_toggle_auto)
         self.hotkey_settings_edit.setText(self.settings.hotkey_settings)
@@ -66,6 +70,7 @@ class SettingsDialog(QDialog):
         self.settings.silence_threshold = self.threshold_spin.value()
         self.settings.silence_timeout = self.timeout_spin.value()
         self.settings.output_dir = self.output_dir_edit.text()
+        self.settings.text_output_dir = self.text_output_dir_edit.text()  # сохраняем
         self.settings.hotkey_toggle_record = self.hotkey_record_edit.text()
         self.settings.hotkey_toggle_auto = self.hotkey_auto_edit.text()
         self.settings.hotkey_settings = self.hotkey_settings_edit.text()

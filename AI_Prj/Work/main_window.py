@@ -1,10 +1,11 @@
 from PySide6.QtWidgets import (QMainWindow, QWidget, QVBoxLayout,
-                               QPushButton, QLabel, QMessageBox)
+                               QPushButton, QLabel, QMessageBox, QLineEdit)
 from PySide6.QtCore import Qt, Slot
 from recorder import Recorder
 from settings import Settings
 from hotkey_manager import HotkeyManager
 from settings_dialog import SettingsDialog
+from text_saver import TextSaver
 
 class MainWindow(QMainWindow):
     def __init__(self):
@@ -12,9 +13,10 @@ class MainWindow(QMainWindow):
         self.settings = Settings()
         self.recorder = Recorder(self.settings)
         self.hotkey_manager = HotkeyManager()
+        self.text_saver = TextSaver(self.settings.text_output_dir)
 
         self.setWindowTitle("Диктофон с авторежимом")
-        self.setFixedSize(400, 300)
+        self.setFixedSize(400, 350)
 
         central = QWidget()
         self.setCentralWidget(central)
@@ -47,6 +49,11 @@ class MainWindow(QMainWindow):
         self.info_label.setAlignment(Qt.AlignCenter)
         layout.addWidget(self.info_label)
 
+        self.input_field = QLineEdit()
+        self.input_field.setPlaceholderText("Введите текст и нажмите Enter для сохранения")
+        self.input_field.returnPressed.connect(self.save_text_input)
+        layout.addWidget(self.input_field)
+
         # Подключаем сигналы рекордера
         self.recorder.recording_started.connect(self.on_recording_started)
         self.recorder.recording_stopped.connect(self.on_recording_stopped)
@@ -66,6 +73,13 @@ class MainWindow(QMainWindow):
         self.settings_dialog = None
 
         self.update_ui()
+
+    def save_text_input(self):
+        text = self.input_field.text()
+        success, message = self.text_saver.save_text(text)
+        if success:
+            self.input_field.clear()
+        self.recorder.status_message.emit(message)
 
     def on_record_clicked(self):
         if self.recorder.auto_mode:
@@ -112,6 +126,7 @@ class MainWindow(QMainWindow):
         if self.settings_dialog.exec():  # exec() блокирует, пока диалог не закроется
             self.recorder.update_settings()
             self.hotkey_manager.register_all(self.settings)
+            self.text_saver = TextSaver(self.settings.text_output_dir)
         # После закрытия сбрасываем ссылку
         self.settings_dialog = None
 

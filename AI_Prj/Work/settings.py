@@ -7,7 +7,8 @@ class Settings:
         # Параметры по умолчанию
         self.silence_threshold = 500       # порог громкости (RMS)
         self.silence_timeout = 10           # секунд тишины для останова
-        self.output_dir = "recordings"       # папка для сохранения
+        self.output_dir = "recordings"       # папка для сохранения аудио
+        self.text_output_dir = "text_recordings" # для текста
         self.hotkey_toggle_record = "f9"    # старт/стоп записи
         self.hotkey_toggle_auto = "f10"     # переключение авторежима
         self.hotkey_settings = "f11"        # открыть настройки
